@@ -14,9 +14,9 @@
     <string-array name="branches">
         <item>Information Technology</item>
         <item>Computer Science</item>
-<!--        <item>Mechanical</item>-->
-<!--        <item>Civil</item>-->
-<!--        <item>Bio-Technology</item>-->
+        <!--        <item>Mechanical</item>-->
+        <!--        <item>Civil</item>-->
+        <!--        <item>Bio-Technology</item>-->
     </string-array>
 
     <string-array name="classes">
