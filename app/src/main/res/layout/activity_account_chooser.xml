@@ -7,7 +7,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:background="@color/white"
-    tools:context=".AccountChooser">
+    tools:context=".AccountChooserActivity">
 
     <LinearLayout
         android:layout_width="wrap_content"

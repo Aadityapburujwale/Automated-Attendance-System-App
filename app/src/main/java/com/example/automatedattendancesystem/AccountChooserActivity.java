@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class AccountChooser extends AppCompatActivity {
+public class AccountChooserActivity extends AppCompatActivity {
 
     Button teacher_chooser;
     Button student_chooser;

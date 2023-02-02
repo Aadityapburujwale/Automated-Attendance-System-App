@@ -7,10 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
 
-import java.util.Objects;
-
 public class SplashScreen extends AppCompatActivity {
-    private static final int SPLASH_SCREEN_TIME_OUT=3500;
+    private static final int SPLASH_SCREEN_TIME_OUT= 500;
 
     ImageView splashImage;
 
@@ -32,7 +30,7 @@ public class SplashScreen extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
             Intent i=new Intent(SplashScreen.this,
-                    AccountChooser.class);
+                    AccountChooserActivity.class);
             //Intent is used to switch from one activity to another.
 
             startActivity(i);

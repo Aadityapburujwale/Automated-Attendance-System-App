@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".LoginStudentActivity">
+    tools:context=".StudentRegistrationActivity">
 
     <TextView
         android:id="@+id/login_text"
@@ -44,7 +44,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/registration_student_name_edittext"
+                android:id="@+id/name_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/login_text"
@@ -71,7 +71,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/login_email_edit_text"
+                android:id="@+id/email_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/login_text"
@@ -97,7 +97,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/login_mobile_edit_text"
+                android:id="@+id/mobile_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -122,11 +122,22 @@
                 android:background="@drawable/ic_baseline_school_24"
                 android:textSize="20sp" />
 
-            <Spinner
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_margin="10dp"
-                android:spinnerMode="dropdown" />
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_branch"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="none"
+                    android:text="Select Branch" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
         </LinearLayout>
 
@@ -143,11 +154,23 @@
                 android:layout_height="20dp"
                 android:background="@drawable/specialization" />
 
-            <Spinner
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:spinnerMode="dropdown" />
+                >
+
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_class"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="none"
+                    android:text="Select Class"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
 
 
@@ -166,7 +189,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/registration_roll_edit_text"
+                android:id="@+id/roll_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -192,7 +215,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/login_password_edit_text"
+                android:id="@+id/password_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/login_email_edit_text"
@@ -220,8 +243,19 @@
 
     </RelativeLayout>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="170dp"
+        android:layout_height="55dp"
+        android:layout_below="@+id/registration_relative1"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="7dp"
+        android:visibility="gone"/>
+
     <Button
-        android:id="@+id/student_login_btn"
+        android:id="@+id/btn_register"
         android:layout_width="170dp"
         android:layout_height="55dp"
         android:layout_below="@+id/registration_relative1"
@@ -231,18 +265,7 @@
         android:layout_marginBottom="7dp"
         android:backgroundTint="#009DFF"
         android:text="Register"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/student_register_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Not Registered? Register"
-        android:textSize="14sp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="13dp"
-        android:textColor="@color/black"
-        android:layout_below="@+id/student_login_btn"
-        />
+        android:textStyle="bold"
+        android:visibility="visible" />
 
 </RelativeLayout>
