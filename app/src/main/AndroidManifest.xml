@@ -15,6 +15,13 @@
         android:theme="@style/Theme.AutomatedAttendanceSystem"
         tools:targetApi="31">
         <activity
+            android:name=".TeacherHomeActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".StudentHomeActivity"
             android:exported="false" />
         <activity
