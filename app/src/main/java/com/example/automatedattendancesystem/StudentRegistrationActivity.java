@@ -17,8 +17,11 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.automatedattendancesystem.Constants.APIs;
 import com.example.automatedattendancesystem.utils.APICaller;
+import com.example.automatedattendancesystem.utils.Keyboard;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -42,7 +45,8 @@ public class StudentRegistrationActivity extends AppCompatActivity {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                closeKeyboard();
+
+                Keyboard.close(StudentRegistrationActivity.this);
 
                 String name = fullNameET.getText().toString();
                 String email = emailET.getText().toString();
@@ -59,19 +63,38 @@ public class StudentRegistrationActivity extends AppCompatActivity {
 
     }
 
+    private void initializeView() {
+
+        fullNameET = findViewById(R.id.name_edittext);
+        emailET = findViewById(R.id.email_edit_text);
+        mobileET = findViewById(R.id.mobile_edit_text);
+        rollNumberET = findViewById(R.id.roll_edit_text);
+        passwordET = findViewById(R.id.password_edit_text);
+
+        branchDropDown = findViewById(R.id.dropdown_branch);
+        classDropDown = findViewById(R.id.dropdown_class);
+
+        registerBtn = findViewById(R.id.btn_register);
+
+        progressBar = findViewById(R.id.progressBar);
+
+    }
+
     private void doRegistration(String name, String email, String mobileNumber, String rollNumber, String password, String branch, String aClass) {
 
         registerBtn.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
 
-
-        // API URL FOR LOGIN
-        final String SIGN_UP_URL = "https://students-attendance-system-api.onrender.com/Student/signup";
+        if(branch.equals("Information Technology")){
+            branch = "IT";
+        }else if(branch.equals("Computer Science")){
+            branch = "CS";
+        }
 
         // RequestQueue to make API Request
         RequestQueue requestQueue = APICaller.getInstance(this).getRequestQueue();
 
-        // Data To Send As A Body Or Parameters To The Login API
+        // Data To Send As A Body Or Parameters To The Sign Up API
         Map<String, String> requestBody = new HashMap<String, String>();
         requestBody.put("name", name);
         requestBody.put("email", email);
@@ -83,14 +106,19 @@ public class StudentRegistrationActivity extends AppCompatActivity {
         requestBody.put("macAddress","MAC HERE");
 
         // Build API Request
-        JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST,SIGN_UP_URL, new JSONObject(requestBody),
+        JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, APIs.SIGN_UP_URL, new JSONObject(requestBody),
                 response -> {
 
                     registerBtn.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
 
-                    if(response.has("id")){
-                        Toast.makeText(StudentRegistrationActivity.this,"Registration Successful!",Toast.LENGTH_SHORT).show();
+                    if(response.has("studentId")){
+                         try {
+                             Toast.makeText(StudentRegistrationActivity.this,"Registration Successful!",Toast.LENGTH_SHORT).show();
+                             Toast.makeText(StudentRegistrationActivity.this,"Your ID is "+response.get("studentId").toString(),Toast.LENGTH_SHORT).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         Intent intent = new Intent(StudentRegistrationActivity.this, LoginStudentActivity.class);
                         startActivity(intent);
                         finish();
@@ -112,23 +140,6 @@ public class StudentRegistrationActivity extends AppCompatActivity {
 
     }
 
-    private void initializeView() {
-
-        fullNameET = findViewById(R.id.name_edittext);
-        emailET = findViewById(R.id.email_edit_text);
-        mobileET = findViewById(R.id.mobile_edit_text);
-        rollNumberET = findViewById(R.id.roll_edit_text);
-        passwordET = findViewById(R.id.password_edit_text);
-
-        branchDropDown = findViewById(R.id.dropdown_branch);
-        classDropDown = findViewById(R.id.dropdown_class);
-
-        registerBtn = findViewById(R.id.btn_register);
-
-        progressBar = findViewById(R.id.progressBar);
-
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -140,13 +151,5 @@ public class StudentRegistrationActivity extends AppCompatActivity {
 
         ArrayAdapter<CharSequence> stationsAdapter = new ArrayAdapter(this, R.layout.dropdown_items, stations);
         classDropDown.setAdapter(stationsAdapter);
-    }
-
-    void closeKeyboard(){
-        View view = this.getCurrentFocus();
-        if(view != null){
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),0);
-        }
     }
 }
