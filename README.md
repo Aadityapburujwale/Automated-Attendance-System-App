@@ -1,1 +1,1 @@
-# Automated-Attendance-System
+# Automated Attendance System
