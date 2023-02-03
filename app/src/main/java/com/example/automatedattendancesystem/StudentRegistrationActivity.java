@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -12,6 +14,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -24,7 +27,10 @@ import com.example.automatedattendancesystem.utils.Keyboard;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.NetworkInterface;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StudentRegistrationActivity extends AppCompatActivity {
@@ -41,6 +47,7 @@ public class StudentRegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_student_registration);
 
         initializeView();
+
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +98,12 @@ public class StudentRegistrationActivity extends AppCompatActivity {
             branch = "CS";
         }
 
+
+
+//        WifiManager wifiManeger = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+//        WifiInfo wifiInfo = wifiManeger.getConnectionInfo();
+//        final String MAC_ADDRESS = wifiInfo.getMacAddress();
+
         // RequestQueue to make API Request
         RequestQueue requestQueue = APICaller.getInstance(this).getRequestQueue();
 
@@ -103,7 +116,7 @@ public class StudentRegistrationActivity extends AppCompatActivity {
         requestBody.put("branch", "IT");
         requestBody.put("rollNo", rollNumber);
         requestBody.put("password", password);
-        requestBody.put("macAddress","MAC HERE");
+        requestBody.put("macAddress", getWifiMacAddress());
 
         // Build API Request
         JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, APIs.SIGN_UP_URL, new JSONObject(requestBody),
@@ -151,5 +164,32 @@ public class StudentRegistrationActivity extends AppCompatActivity {
 
         ArrayAdapter<CharSequence> stationsAdapter = new ArrayAdapter(this, R.layout.dropdown_items, stations);
         classDropDown.setAdapter(stationsAdapter);
+    }
+
+    public static String getWifiMacAddress() {
+        try {
+            String interfaceName = "wlan0";
+            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+            for (NetworkInterface intf : interfaces) {
+                if (!intf.getName().equalsIgnoreCase(interfaceName)){
+                    continue;
+                }
+
+                byte[] mac = intf.getHardwareAddress();
+                if (mac==null){
+                    return "";
+                }
+
+                StringBuilder buf = new StringBuilder();
+                for (byte aMac : mac) {
+                    buf.append(String.format("%02X:", aMac));
+                }
+                if (buf.length()>0) {
+                    buf.deleteCharAt(buf.length() - 1);
+                }
+                return buf.toString();
+            }
+        } catch (Exception ignored) { } // for now eat exceptions
+        return "";
     }
 }
