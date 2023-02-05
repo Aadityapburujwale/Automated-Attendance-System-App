@@ -35,11 +35,7 @@ public class SharedPrefManager {
     }
 
     public boolean isStudentLoggedIn(){
-        if(sharedPreferences.getBoolean(LOGIN_STATE,false)){
-            return true;
-        }
-
-        return false;
+        return sharedPreferences.getBoolean(LOGIN_STATE,false);
     }
 
 }

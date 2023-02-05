@@ -24,7 +24,7 @@ public class AccountChooserActivity extends AppCompatActivity {
 
     }
     public void teacher_chooser(View view) {
-        Intent teacher_btn = new Intent(this, LoginTeacherActivity.class);
+        Intent teacher_btn = new Intent(this, TakeAttendanceActivity.class);
         startActivity(teacher_btn);
     }
 

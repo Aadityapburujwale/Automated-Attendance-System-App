@@ -16,7 +16,7 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        splashImage = findViewById(R.id.spashImageView);
+//        splashImage = findViewById(R.id.spash_image_view);
 
         // Hide action bar
        // Objects.requireNonNull(getSupportActionBar()).hide();
