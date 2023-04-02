@@ -12,6 +12,7 @@ import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +38,7 @@ public class TakeAttendanceActivity extends AppCompatActivity {
     WifiScanReceiver wifiReciever;
     String wifis[];
     Button fetchNamesBtn;
-
+    ProgressBar progressBar;
     TextView countDownTimer;
     int counter = 10;
     @Override
@@ -47,6 +48,12 @@ public class TakeAttendanceActivity extends AppCompatActivity {
 
         countDownTimer = findViewById(R.id.timer);
         fetchNamesBtn = findViewById(R.id.fetch_names);
+
+
+        progressBar = findViewById(R.id.progressBar);
+
+        fetchNamesBtn.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
 
         fetchNamesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +82,9 @@ public class TakeAttendanceActivity extends AppCompatActivity {
     }
 
     private void onTimerFinish(String[] wifis) {
+
+        fetchNamesBtn.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
 
         countDownTimer.setText("Fetching Students Name...");
 
@@ -131,6 +141,7 @@ public class TakeAttendanceActivity extends AppCompatActivity {
                 error -> {
                     Log.v("checking",error.toString());
                     fetchNamesBtn.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(TakeAttendanceActivity.this,"Server Error, Please Try again!"+error.toString(),Toast.LENGTH_SHORT).show();
                 });
 

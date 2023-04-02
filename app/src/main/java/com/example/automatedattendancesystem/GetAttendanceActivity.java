@@ -3,7 +3,6 @@ package com.example.automatedattendancesystem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -23,23 +22,17 @@ import com.example.automatedattendancesystem.models.StudentsModel;
 import com.example.automatedattendancesystem.utils.APICaller;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.BorderStyle;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -92,10 +85,11 @@ public class GetAttendanceActivity extends AppCompatActivity {
                     classDropDown.setError("Select Class");
                     return;
                 }
-                else if(subject.equals("Select Subject")){
-                    subjectDropDown.setError("Select Subject");
-                    return;
-                }else{
+//                else if(subject.equals("Select Subject")){
+//                    subjectDropDown.setError("Select Subject");
+//                    return;
+//                }
+                else{
 
                     if(branch.equals("Information Technology")){
                         branch = "IT";
@@ -225,7 +219,7 @@ public class GetAttendanceActivity extends AppCompatActivity {
 
     private StudentAttendanceModel[] getStudentsAttendanceData(JSONObject response1, StudentsModel[] studentsData) {
 
-        StudentAttendanceModel[] studentsAttendanceData = null;
+        StudentAttendanceModel[] studentsAttendanceData = new StudentAttendanceModel[0];
 
         try {
             JSONArray receivedData = response1.getJSONArray("students");
@@ -233,11 +227,36 @@ public class GetAttendanceActivity extends AppCompatActivity {
             for(int i=0;i<receivedData.length();i++){
                 String studentId = receivedData.getJSONObject(i).get("studentId").toString();
                 JSONObject subjectsData = receivedData.getJSONObject(i).getJSONObject("subjects");
-                int attendedLectures[] = new int[4];
-                attendedLectures[0] = Integer.parseInt(subjectsData.get("Cyber_Security").toString());
-                attendedLectures[1] = Integer.parseInt(subjectsData.get("Soft_Computing").toString());
-                attendedLectures[2] = Integer.parseInt(subjectsData.get("LRPS").toString());
-                attendedLectures[3] = Integer.parseInt(subjectsData.get("Data_Analytics").toString());
+
+                String branch = branchDropDown.getText().toString();
+                String _class = classDropDown.getText().toString();
+
+                if(branch.equals("Information Technology")){
+                    branch = "IT";
+                }else if(branch.equals("Computer Science")){
+                    branch = "CS";
+                }
+
+                String subjects[];
+                if(branch.equals("CS") && _class.equals("SE")){
+                    subjects = getResources().getStringArray(R.array.SE_CS_Subjects);
+                }else if((branch.equals("CS") || branch.equals("IT")) && _class.equals("BE")){
+                    subjects = getResources().getStringArray(R.array.BE_CS_IT_Subjects);
+                }else{
+                    subjects = new String[0];
+                }
+
+                int attendedLectures[] = new int[subjects.length];
+
+
+                for(int j=0;j<subjects.length;j++){
+                    attendedLectures[j] = Integer.parseInt(subjectsData.get(subjects[j]).toString());
+                }
+
+//                attendedLectures[0] = Integer.parseInt(subjectsData.get("Cyber_Security").toString());
+//                attendedLectures[1] = Integer.parseInt(subjectsData.get("Soft_Computing").toString());
+//                attendedLectures[2] = Integer.parseInt(subjectsData.get("LRPS").toString());
+//                attendedLectures[3] = Integer.parseInt(subjectsData.get("Data_Analytics").toString());
 
                 String name = "";
                 int rollNo = 0;
@@ -264,7 +283,7 @@ public class GetAttendanceActivity extends AppCompatActivity {
 
     private StudentsModel[] getStudentsData(JSONObject response) {
 
-        StudentsModel[] studentsData = null;
+        StudentsModel[] studentsData = new StudentsModel[0];
 
         try {
             JSONArray receivedData = response.getJSONArray("students");
@@ -289,7 +308,7 @@ public class GetAttendanceActivity extends AppCompatActivity {
         super.onResume();
         String designations[] = getResources().getStringArray(R.array.branches);
         String stations[] = getResources().getStringArray(R.array.classes);
-        String subjects[] = getResources().getStringArray(R.array.subjects);
+        String subjects[] = new String[]{"Select Subject"};
 
         ArrayAdapter<CharSequence> designationsAdapter = new ArrayAdapter(this, R.layout.dropdown_items, designations);
         branchDropDown.setAdapter(designationsAdapter);
@@ -340,7 +359,7 @@ public class GetAttendanceActivity extends AppCompatActivity {
         filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + "/"+appFolderName+"/"+fileName);
 
 
-
+        if(studentAttendanceData.length>0)
         Arrays.sort(studentAttendanceData,(a,b)->a.rollNo-b.rollNo);
 
         HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
@@ -358,18 +377,24 @@ public class GetAttendanceActivity extends AppCompatActivity {
         HSSFCell cellStId1 = hssfRow1.createCell(2);
         cellStId1.setCellValue("Student Id");
 
-        HSSFCell cellSub1_ = hssfRow1.createCell(3);
-        cellSub1_.setCellValue("Cyber_Security");
 
-        HSSFCell cellSub2_ = hssfRow1.createCell(4);
-        cellSub2_.setCellValue("Soft_Computing");
 
-        HSSFCell cellSub3_ = hssfRow1.createCell(5);
-        cellSub3_.setCellValue("LRPS");
+        String subjects[];
+        if(branch.equals("CS") && _class.equals("SE")){
+            subjects = getResources().getStringArray(R.array.SE_CS_Subjects);
+        }else if((branch.equals("CS") || branch.equals("IT")) && _class.equals("BE")){
+            subjects = getResources().getStringArray(R.array.BE_CS_IT_Subjects);
+        }else{
+            subjects = new String[0];
+        }
 
-        HSSFCell cellSub4_ = hssfRow1.createCell(6);
-        cellSub4_.setCellValue("Data_Analytics");
+        for(int i=0;i<subjects.length;i++){
+            HSSFCell cellSub1_ = hssfRow1.createCell(3+i);
+            cellSub1_.setCellValue(subjects[i]);
+        }
 
+//        for(StudentAttendanceModel st:studentAttendanceData)
+//        Log.d("sheet",st.toString());
 
         for(int i=0;i<studentAttendanceData.length;i++){
             HSSFRow hssfRow = hssfSheet.createRow(i+1);
@@ -383,17 +408,23 @@ public class GetAttendanceActivity extends AppCompatActivity {
             HSSFCell cellStId = hssfRow.createCell(2);
             cellStId.setCellValue(studentAttendanceData[i].studentId);
 
-            HSSFCell cellSub1 = hssfRow.createCell(3);
-            cellSub1.setCellValue(studentAttendanceData[i].attendedLectures[0]+"");
+            for(int j=0;j<studentAttendanceData[i].attendedLectures.length;j++){
+                HSSFCell cellSub1 = hssfRow.createCell(3+j);
+                cellSub1.setCellValue(studentAttendanceData[i].attendedLectures[j]+"");
 
-            HSSFCell cellSub2 = hssfRow.createCell(4);
-            cellSub2.setCellValue(studentAttendanceData[i].attendedLectures[1]+"");
+            }
 
-            HSSFCell cellSub3 = hssfRow.createCell(5);
-            cellSub3.setCellValue(studentAttendanceData[i].attendedLectures[2]+"");
-
-            HSSFCell cellSub4 = hssfRow.createCell(6);
-            cellSub4.setCellValue(studentAttendanceData[i].attendedLectures[3]+"");
+//            HSSFCell cellSub1 = hssfRow.createCell(3);
+//            cellSub1.setCellValue(studentAttendanceData[i].attendedLectures[0]+"");
+//
+//            HSSFCell cellSub2 = hssfRow.createCell(4);
+//            cellSub2.setCellValue(studentAttendanceData[i].attendedLectures[1]+"");
+//
+//            HSSFCell cellSub3 = hssfRow.createCell(5);
+//            cellSub3.setCellValue(studentAttendanceData[i].attendedLectures[2]+"");
+//
+//            HSSFCell cellSub4 = hssfRow.createCell(6);
+//            cellSub4.setCellValue(studentAttendanceData[i].attendedLectures[3]+"");
 
         }
         hssfSheet.setColumnWidth(1,20*230);

@@ -17,6 +17,16 @@
         android:gravity="center"
         android:textSize="24sp" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="170dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#009DFF"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+
     <Button
         android:id="@+id/fetch_names"
         android:layout_width="170dp"

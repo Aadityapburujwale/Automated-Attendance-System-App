@@ -82,6 +82,7 @@ public class ShowWifiListActivity extends ListActivity {
 
         if(studentNames.length==0){
             noStudents.setVisibility(View.VISIBLE);
+            markAttendance.setEnabled(false);
         }else{
             markAttendance.setVisibility(View.VISIBLE);
             list.setAdapter(new ArrayAdapter<String>(getApplicationContext(),R.layout.list_item,R.id.label, studentNames));

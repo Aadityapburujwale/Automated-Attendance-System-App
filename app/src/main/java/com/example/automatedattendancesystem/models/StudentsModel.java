@@ -11,4 +11,13 @@ public class StudentsModel {
         this.name = name;
         this.rollNo = rollNo;
     }
+
+    @Override
+    public String toString() {
+        return "StudentsModel{" +
+                "studentId='" + studentId + '\'' +
+                ", name='" + name + '\'' +
+                ", rollNo=" + rollNo +
+                '}';
+    }
 }
