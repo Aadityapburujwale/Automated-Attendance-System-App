@@ -40,6 +40,19 @@
             android:padding="25dp"
             android:onClick="student_chooser"/>
 
+        <Button
+            android:id="@+id/change_ssid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change SSID"
+            android:textStyle="bold"
+            android:backgroundTint="#1A237E"
+            android:textSize="20dp"
+            android:textColor="@color/white"
+            android:padding="25dp"
+            android:visibility="gone"
+            android:onClick="changeSSID"/>
+
     </LinearLayout>
 
 </LinearLayout>

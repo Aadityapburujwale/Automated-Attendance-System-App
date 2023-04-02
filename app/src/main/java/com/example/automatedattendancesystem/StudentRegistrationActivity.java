@@ -1,21 +1,17 @@
 package com.example.automatedattendancesystem;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -40,6 +36,7 @@ public class StudentRegistrationActivity extends AppCompatActivity {
     AutoCompleteTextView classDropDown;
     Button registerBtn;
     ProgressBar progressBar;
+    static String studentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +44,7 @@ public class StudentRegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_student_registration);
 
         initializeView();
+
 
 
         registerBtn.setOnClickListener(new View.OnClickListener() {
@@ -60,14 +58,51 @@ public class StudentRegistrationActivity extends AppCompatActivity {
                 String mobileNumber = mobileET.getText().toString();
                 String rollNumber = rollNumberET.getText().toString();
                 String password = passwordET.getText().toString();
-                String branch = fullNameET.getText().toString();
-                String _class = fullNameET.getText().toString();
+                String branch = branchDropDown.getText().toString();
+                String _class = classDropDown.getText().toString();
 
-                doRegistration(name,email,mobileNumber,rollNumber,password,branch,_class);
+                if(validate(name,email,mobileNumber,rollNumber,password,branch,_class)){
+                    doRegistration(name,email,mobileNumber,rollNumber,password,branch,_class);
+                }
 
             }
         });
 
+    }
+
+    private boolean validate(String name, String email, String mobileNumber, String rollNumber, String password, String branch, String _class) {
+
+        if(name.isEmpty()){
+            fullNameET.setError("Enter Name");
+            return false;
+        }
+        if(email.isEmpty()){
+            emailET.setError("Enter Email");
+            return false;
+        }
+        if(mobileNumber.length() != 10){
+            mobileET.setError("Enter Valid Mobile No.");
+            return false;
+        }
+
+        if(branch.equals("Select Branch")){
+            branchDropDown.setError("Select Branch");
+            return false;
+        }
+        if(_class.equals("Select Class")){
+            classDropDown.setError("Select Class");
+            return false;
+        }
+        if(rollNumber.isEmpty()){
+            rollNumberET.setError("Enter Roll No.");
+            return false;
+        }
+        if(password.isEmpty()){
+            passwordET.setError("Enter Password");
+            return false;
+        }
+
+        return true;
     }
 
     private void initializeView() {
@@ -87,7 +122,7 @@ public class StudentRegistrationActivity extends AppCompatActivity {
 
     }
 
-    private void doRegistration(String name, String email, String mobileNumber, String rollNumber, String password, String branch, String aClass) {
+    private void doRegistration(String name, String email, String mobileNumber, String rollNumber, String password, String branch, String _class) {
 
         registerBtn.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
@@ -106,17 +141,19 @@ public class StudentRegistrationActivity extends AppCompatActivity {
 
         // RequestQueue to make API Request
         RequestQueue requestQueue = APICaller.getInstance(this).getRequestQueue();
-
         // Data To Send As A Body Or Parameters To The Sign Up API
         Map<String, String> requestBody = new HashMap<String, String>();
         requestBody.put("name", name);
         requestBody.put("email", email);
         requestBody.put("mobileNumber", mobileNumber);
-        requestBody.put("degree", "BE");
-        requestBody.put("branch", "IT");
+        requestBody.put("branch", branch);
+        requestBody.put("class", _class);
         requestBody.put("rollNo", rollNumber);
         requestBody.put("password", password);
         requestBody.put("macAddress", getWifiMacAddress());
+
+//         Testing
+//        requestBody.put("macAddress", "00:00:00:00:00:25");
 
         // Build API Request
         JsonObjectRequest loginRequest = new JsonObjectRequest(Request.Method.POST, APIs.SIGN_UP_URL, new JSONObject(requestBody),
@@ -127,16 +164,18 @@ public class StudentRegistrationActivity extends AppCompatActivity {
 
                     if(response.has("studentId")){
                          try {
+                             studentId = response.get("studentId").toString();
+                             openStudentIdDialogBox();
                              Toast.makeText(StudentRegistrationActivity.this,"Registration Successful!",Toast.LENGTH_SHORT).show();
                              Toast.makeText(StudentRegistrationActivity.this,"Your ID is "+response.get("studentId").toString(),Toast.LENGTH_SHORT).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        Intent intent = new Intent(StudentRegistrationActivity.this, LoginStudentActivity.class);
-                        startActivity(intent);
-                        finish();
+//                        Intent intent = new Intent(StudentRegistrationActivity.this, LoginStudentActivity.class);
+//                        startActivity(intent);
+//                        finish();
                     }else{
-                        Toast.makeText(StudentRegistrationActivity.this,"Email Already Registered!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(StudentRegistrationActivity.this,"Mobile Number Already Registered!",Toast.LENGTH_SHORT).show();
                     }
 
                 },
@@ -191,5 +230,13 @@ public class StudentRegistrationActivity extends AppCompatActivity {
             }
         } catch (Exception ignored) { } // for now eat exceptions
         return "";
+    }
+
+    private void openStudentIdDialogBox() {
+        studentIdDialog studentIdDialog = new studentIdDialog();
+        studentIdDialog.show(getSupportFragmentManager(), "student Id Dialog");
+//        Intent intent = new Intent(StudentRegistrationActivity.this, LoginStudentActivity.class);
+//        startActivity(intent);
+//        finish();
     }
 }

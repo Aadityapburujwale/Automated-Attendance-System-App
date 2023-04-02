@@ -14,23 +14,23 @@
     <string-array name="branches">
         <item>Information Technology</item>
         <item>Computer Science</item>
-        <!--        <item>Mechanical</item>-->
-        <!--        <item>Civil</item>-->
-        <!--        <item>Bio-Technology</item>-->
+        <item>Mechanical</item>
+        <item>Civil</item>
+        <item>Bio-Technology</item>
     </string-array>
 
     <string-array name="classes">
+        <item>FE</item>
+        <item>SE</item>
+        <item>TE</item>
+        <item>BE</item>
+    </string-array>
 
-        <item>FE IT</item>
-        <item>SE IT</item>
-        <item>TE IT</item>
-        <item>BE IT</item>
-
-        <item>FE CS</item>
-        <item>SE CS</item>
-        <item>TE CS</item>
-        <item>BE CS</item>
-
+    <string-array name="subjects">
+        <item>Cyber_Security</item>
+        <item>Data_Analytics</item>
+        <item>Soft_Computing</item>
+        <item>LRPS</item>
     </string-array>
 
 </resources>

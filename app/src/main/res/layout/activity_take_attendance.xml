@@ -4,17 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     tools:context=".TakeAttendanceActivity">
 
     <TextView
         android:id="@+id/timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text = "TIMER"
+        android:text="Timer"
         android:textColor="@color/black"
-        android:textSize="24sp"
-        />
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textSize="24sp" />
 
+    <Button
+        android:id="@+id/fetch_names"
+        android:layout_width="170dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#009DFF"
+        android:text="Fetch Students Name"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
 </RelativeLayout>
