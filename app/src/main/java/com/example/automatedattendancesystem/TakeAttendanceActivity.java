@@ -46,6 +46,7 @@ public class TakeAttendanceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_attendance);
 
+        wifis = new String[0];
         countDownTimer = findViewById(R.id.timer);
         fetchNamesBtn = findViewById(R.id.fetch_names);
 

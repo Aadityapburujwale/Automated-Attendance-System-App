@@ -234,6 +234,7 @@ public class StudentRegistrationActivity extends AppCompatActivity {
 
     private void openStudentIdDialogBox() {
         studentIdDialog studentIdDialog = new studentIdDialog();
+        studentIdDialog.setCancelable(false);
         studentIdDialog.show(getSupportFragmentManager(), "student Id Dialog");
 //        Intent intent = new Intent(StudentRegistrationActivity.this, LoginStudentActivity.class);
 //        startActivity(intent);

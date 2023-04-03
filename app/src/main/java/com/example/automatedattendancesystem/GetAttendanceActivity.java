@@ -265,6 +265,7 @@ public class GetAttendanceActivity extends AppCompatActivity {
                     if(st.studentId.equals(studentId)){
                         name = st.name;
                         rollNo = st.rollNo;
+                        break;
                     }
                 }
 
