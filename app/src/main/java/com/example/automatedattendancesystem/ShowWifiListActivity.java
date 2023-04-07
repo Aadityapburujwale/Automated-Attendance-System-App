@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -174,8 +175,15 @@ public class ShowWifiListActivity extends ListActivity {
 
         String appFolderName  = "Automated Attendance System";
 
-        File appDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS+File.separator+appFolderName);
-        if(!appDirectory.exists() && !appDirectory.isDirectory())
+        File appDirectory;
+
+        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.Q){
+            appDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS+File.separator+appFolderName);
+        } else{
+            appDirectory = new File(Environment.getExternalStorageDirectory(),Environment.DIRECTORY_DOWNLOADS+"/"+appFolderName);
+        }
+
+       if(!appDirectory.exists() && !appDirectory.isDirectory())
         {
             if (appDirectory.mkdirs())
             {
@@ -195,7 +203,15 @@ public class ShowWifiListActivity extends ListActivity {
         SimpleDateFormat currDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         String currDayFolder = currDate.format(new Date());
 
-        File currDayDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS+File.separator+appFolderName+File.separator+currDayFolder);
+        File currDayDir;
+
+        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.Q){
+            currDayDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS+File.separator+appFolderName+File.separator+currDayFolder);
+
+        } else{
+            currDayDir = new File(Environment.getExternalStorageDirectory(),Environment.DIRECTORY_DOWNLOADS+"/"+appFolderName+File.separator+currDayFolder);
+        }
+
         if(!currDayDir.exists() && !currDayDir.isDirectory())
         {
             if (currDayDir.mkdirs())
@@ -216,7 +232,13 @@ public class ShowWifiListActivity extends ListActivity {
 
         String fileName = _class+ "_" + branch +"_"+ subject +" " + currentDateandTime + ".xls";
 
-        filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + "/"+appFolderName+"/"+currDayFolder+"/"+fileName);
+
+        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.Q){
+            filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + "/"+appFolderName+"/"+currDayFolder+"/"+fileName);
+        } else{
+            String tempPath = Environment.getExternalStorageDirectory() +"/"+ Environment.DIRECTORY_DOWNLOADS + "/"+appFolderName+"/"+currDayFolder+"/"+fileName;
+            filePath = new File(tempPath);
+        }
 
         String studentNames[] = getIntent().getStringArrayExtra("studentNames");
 

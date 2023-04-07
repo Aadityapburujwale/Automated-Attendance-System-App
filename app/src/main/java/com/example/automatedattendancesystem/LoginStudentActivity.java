@@ -96,12 +96,14 @@ public class LoginStudentActivity extends AppCompatActivity {
                             if(response.get("message").toString().equals("student exist")){
                                 Toast.makeText(LoginStudentActivity.this,"Login Success.",Toast.LENGTH_SHORT).show();
                                 onLoginSuccess(studentId);
+                            }else{
+                                Toast.makeText(LoginStudentActivity.this,"Enter Valid Details",Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }else{
-                        Toast.makeText(LoginStudentActivity.this,"Enter Valid Details",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginStudentActivity.this,"Try Again!",Toast.LENGTH_SHORT).show();
                     }
 
                 },

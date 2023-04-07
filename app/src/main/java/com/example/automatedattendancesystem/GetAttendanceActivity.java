@@ -3,6 +3,7 @@ package com.example.automatedattendancesystem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -337,7 +338,14 @@ public class GetAttendanceActivity extends AppCompatActivity {
 
         String appFolderName  = "Automated Attendance System";
 
-        File appDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS+File.separator+appFolderName);
+        File appDirectory;
+
+        if (android.os.Build.VERSION.SDK_INT > Build.VERSION_CODES.Q){
+            appDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS+File.separator+appFolderName);
+        } else{
+            appDirectory = new File(Environment.getExternalStorageDirectory(),Environment.DIRECTORY_DOWNLOADS+"/"+appFolderName);
+        }
+
         if(!appDirectory.exists() && !appDirectory.isDirectory())
         {
             if (appDirectory.mkdirs())
@@ -357,8 +365,15 @@ public class GetAttendanceActivity extends AppCompatActivity {
 
         String fileName = _class+ "_" + branch + " " + currentDateandTime + ".xls";
 
-        filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + "/"+appFolderName+"/"+fileName);
-
+        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.Q){
+            String tempPath = Environment.DIRECTORY_DOWNLOADS + "/"+appFolderName+"/"+fileName;
+//            Toast.makeText(GetAttendanceActivity.this,tempPath,Toast.LENGTH_SHORT).show();
+            filePath = Environment.getExternalStoragePublicDirectory(tempPath);
+        } else{
+            String tempPath = Environment.getExternalStorageDirectory() +"/"+ Environment.DIRECTORY_DOWNLOADS + "/"+appFolderName+"/"+fileName;
+//            Toast.makeText(GetAttendanceActivity.this,tempPath,Toast.LENGTH_SHORT).show();
+            filePath = new File(tempPath);
+        }
 
         if(studentAttendanceData.length>0)
         Arrays.sort(studentAttendanceData,(a,b)->a.rollNo-b.rollNo);
